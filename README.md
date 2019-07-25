@@ -1,3 +1,19 @@
+# Download Pre-trained weights
+```
+bash download.sh
+```
+
+# Demo body keypoints detection
+```
+python demo_cpm_body.py --DEMO_TYPE test_imgs/roger.png
+```
+
+# Demo hand keypoints detection
+```
+python demo_cpm_hand.py --DEMO_TYPE test_imgs/hand.png
+```
+
+
 # Convolutional Pose Machines - Tensorflow
 
 <p align="center">
