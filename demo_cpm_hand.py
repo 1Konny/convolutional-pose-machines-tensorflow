@@ -1,6 +1,7 @@
 # For single hand and no body part in the picture
 # ======================================================
 
+import os
 import tensorflow as tf
 from models.nets import cpm_hand_slim
 import numpy as np
@@ -14,7 +15,7 @@ import sys
 """
 FLAGS = tf.app.flags.FLAGS
 tf.app.flags.DEFINE_string('DEMO_TYPE',
-                           default_value='test_imgs/longhand.jpg',
+                           default_value='test_imgs/hand.png',
                            # default_value='SINGLE',
                            docstring='MULTI: show multiple stage,'
                                      'SINGLE: only last stage,'
@@ -178,9 +179,12 @@ def main(argv):
 
                 # Show visualized image
                 demo_img = visualize_result(test_img, FLAGS, stage_heatmap_np, kalman_filter_array)
-                cv2.imshow('demo_img', demo_img.astype(np.uint8))
-                if cv2.waitKey(0) == ord('q'): break
+                ext = os.path.splitext(FLAGS.DEMO_TYPE)[1]
+                save_path = FLAGS.DEMO_TYPE.replace(ext, '_results'+ext)
+                cv2.imwrite(save_path, demo_img.astype(np.uint8))
                 print('fps: %.2f' % (1 / (time.time() - t1)))
+                break
+
             elif FLAGS.DEMO_TYPE == 'MULTI':
 
                 # Inference

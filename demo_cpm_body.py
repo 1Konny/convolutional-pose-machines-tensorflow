@@ -1,4 +1,5 @@
 import numpy as np
+from PIL import Image
 from utils import cpm_utils
 import cv2
 import time
@@ -14,9 +15,7 @@ from models.nets import cpm_body_slim
 """
 FLAGS = tf.app.flags.FLAGS
 tf.app.flags.DEFINE_string('DEMO_TYPE',
-                           # default_value='test_imgs/roger.png',
-                           default_value='test_imgs/single_gym.mp4',
-                           # default_value='SINGLE',
+                           default_value='test_imgs/roger.png',
                            docstring='MULTI: show multiple stage,'
                                      'SINGLE: only last stage,'
                                      'HM: show last stage heatmap,'
@@ -46,7 +45,7 @@ tf.app.flags.DEFINE_integer('cam_num',
 tf.app.flags.DEFINE_bool('KALMAN_ON',
                          default_value=False,
                          docstring='enalbe kalman filter')
-tf.app.flags.DEFINE_integer('kalman_noise',
+tf.app.flags.DEFINE_float('kalman_noise',
                             default_value=3e-2,
                             docstring='Kalman filter noise value')
 tf.app.flags.DEFINE_string('color_channel',
@@ -239,9 +238,11 @@ def main(argv):
 
                     # Show visualized image
                     demo_img = visualize_result(test_img, FLAGS, stage_heatmap_np, kalman_filter_array)
-                    cv2.imshow('demo_img', demo_img.astype(np.uint8))
-                    if cv2.waitKey(0) == ord('q'): break
+                    ext = os.path.splitext(FLAGS.DEMO_TYPE)[1]
+                    save_path = FLAGS.DEMO_TYPE.replace(ext, '_results'+ext)
+                    cv2.imwrite(save_path, demo_img.astype(np.uint8))
                     print('fps: %.2f' % (1 / (time.time() - fps_t)))
+                    break
 
                 elif FLAGS.DEMO_TYPE == 'MULTI':
 
