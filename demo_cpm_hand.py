@@ -111,7 +111,10 @@ def main(argv):
 
     """Create session and restore weights
     """
-    sess = tf.Session()
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth = True
+    sess = tf.Session(config=config)
+    #sess = tf.Session()
 
     sess.run(tf.global_variables_initializer())
     if FLAGS.model_path.endswith('pkl'):
